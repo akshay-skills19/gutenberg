@@ -46,7 +46,7 @@ export class BooksComponent implements OnInit {
         this.books = [];
         this.tmp = [];
       }),
-      switchMap(value => this.httpService.get_by_observable('books?search='+value)
+      switchMap(value => this.httpService.get_by_observable('books?search='+value+'&mime_type=image')
         .pipe(
           finalize(() => {
 
@@ -55,10 +55,6 @@ export class BooksComponent implements OnInit {
       )
     ).subscribe(data => {
       this.books = data.results;
-      this.books = this.books.map((book) => {
-        book.img_url = this.book_covers[Math.floor(Math.random() * this.book_covers.length)];
-        return book;
-      })
       this.addItems(this.start, this.sum);
     });
   }
@@ -85,12 +81,8 @@ export class BooksComponent implements OnInit {
   }
 
   getBooks(){
-    this.httpService.get_by_observable('books?topic='+this.category).subscribe((result) => {
+    this.httpService.get_by_observable('books?topic='+this.category+'&mime_type=image').subscribe((result) => {
       this.books = result.results;
-      this.books = this.books.map((book) => {
-        book.img_url = this.book_covers[Math.floor(Math.random() * this.book_covers.length)];
-        return book;
-      })
       this.addItems(this.start, this.sum);
     }, (error)=>{
       console.log(error)
